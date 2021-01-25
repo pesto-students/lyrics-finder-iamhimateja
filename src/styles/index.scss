@@ -1,22 +1,43 @@
 // References
 // CSS Grid: https://css-tricks.com/snippets/css/complete-guide-grid/
 
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
-@import url("reset.css");
+/* stylelint-disable no-descending-specificity */
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+@import "reset";
+@import "mixins";
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   height: 100vh;
-  background: #b3beda;
-  // For Dark mode
-  // background: #232526;
-  // background: linear-gradient(to right, #414345, #232526);
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  scrollbar-face-color: #666;
+  scrollbar-track-color: rgba(255, 255, 255, 0.1);
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    margin-left: 2px;
+
+    @media (prefers-color-scheme: dark) {
+      background: rgb(49, 49, 49);
+    }
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #007ee5;
+    border-radius: 2px;
+
+    @media (prefers-color-scheme: dark) {
+      background: rgb(124, 124, 124);
+    }
+  }
 
   * {
-    font-family: "Rajdhani", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
@@ -26,11 +47,518 @@ body {
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
   }
+
+  .container {
+    display: flex;
+    height: 100vh;
+    max-width: 60vw;
+    margin: 0 auto;
+    padding-top: 10vw;
+    align-items: center;
+    flex-direction: column;
+    transition-delay: 1s;
+
+    &.hide {
+      display: none;
+    }
+
+    .logo {
+      display: block;
+      width: 10vw;
+      height: 10vw;
+      margin-bottom: 10px;
+      transition-delay: 0.3s;
+
+      svg {
+        fill: #fff;
+
+        @media (prefers-color-scheme: dark) {
+          fill: #797979;
+        }
+      }
+    }
+
+    .title {
+      font-family: Bungee, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+      font-size: 2.5em;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 10px;
+      transition-delay: 0.5s;
+
+      @media (prefers-color-scheme: dark) {
+        color: #797979;
+      }
+    }
+
+    .primary-search {
+      position: relative;
+      width: calc(100% - 15vw);
+      margin-top: 25px;
+      transition-delay: 0.7s;
+
+      input {
+        padding: 10px 60px 10px 25px;
+        width: 100%;
+        height: 50px;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        border: 0;
+        border-radius: 5px;
+        outline: none;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+
+        @media (prefers-color-scheme: dark) {
+          background: #292929;
+          color: #a2a2a2;
+
+          &:focus {
+            background: #333;
+          }
+        }
+      }
+
+      .icon {
+        position: absolute;
+        width: 50px;
+        top: 0;
+        right: 0;
+        opacity: 0.5;
+        height: 100%;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        svg {
+          position: absolute;
+          width: 25px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+
+          .search-circle,
+          .search-stroke-path {
+            stroke: #200e32;
+
+            @media (prefers-color-scheme: dark) {
+              stroke: #fff;
+            }
+          }
+        }
+      }
+    }
+
+    .logo,
+    .title,
+    .primary-search {
+      visibility: visible;
+      transform: scale(1);
+      filter: none;
+      opacity: 1;
+      transition: 1.25s cubic-bezier(1, 0.05, 0, 1);
+
+      &.hide {
+        transform: scale(1.5);
+        filter: blur(50px);
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
+
+  .search-container {
+    position: relative;
+    background-color: #fff;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #0f1223;
+    }
+
+    height: 100%;
+    display: none;
+
+    &.show {
+      display: block;
+    }
+
+    .header {
+      position: fixed;
+      top: -65px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #fff;
+      transition: 0.8s ease-in-out;
+
+      &.show {
+        top: 0;
+      }
+
+      .logo {
+        display: inline-flex;
+        height: 100%;
+
+        svg {
+          width: 35px;
+          fill: #0f1223;
+          margin: 0 15px;
+        }
+      }
+
+      .search {
+        @include transform-center;
+
+        width: 500px;
+        border-radius: 50px;
+        box-shadow: 0 0 0 1px #101324;
+
+        input {
+          display: block;
+          width: 100%;
+          height: 40px;
+          border: 0;
+          box-shadow: none;
+          border-radius: 50px;
+          padding: 5px 20px;
+          font-size: 15px;
+          outline: none;
+          letter-spacing: 1px;
+          text-align: center;
+
+          &:focus {
+            background: rgba(0, 38, 255, 0.08);
+            text-align: left;
+          }
+        }
+
+        .search-button {
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          top: 0;
+          right: 5px;
+
+          svg {
+            @include transform-center;
+
+            width: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .homeScreenSuggestions {
+    position: relative;
+    width: calc(100% - 15vw);
+    background: #fff;
+    margin-top: -2px;
+    max-height: 25vw;
+    overflow-y: scroll;
+    box-shadow: inset 0 1px 0 0 #d2d2d2;
+    border-radius: 0 0 5px 5px;
+    display: none;
+
+    &.open {
+      display: block;
+    }
+
+    .show-all-results-button {
+      display: none;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #fff;
+      color: unset;
+
+      &:hover {
+        background: #e4f1ff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        background: #222;
+        color: #929292;
+
+        &:hover {
+          background: #1d1d1d;
+        }
+      }
+
+      &.show {
+        display: block;
+      }
+    }
+
+    // &::before {
+    //   content: "Click on track to get lyrics";
+    //   position: sticky;
+    //   width: calc(100% - 20px);
+    //   display: block;
+    //   top: 0px;
+    //   padding: 10px;
+    //   background: #fff;
+    //   z-index: 1;
+    //   backdrop-filter: blur(10px);
+    //   -webkit-backdrop-filter: blur(6px);
+    //   backdrop-filter: blur(6px);
+    //   -webkit-mask-image: linear-gradient(black 50%, transparent);
+    // }
+
+    .suggestion {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: inset 0 -1px 0 0 #efefef;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background: #e4f1ff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        background: #212121;
+        box-shadow: inset 0 -1px 0 0 #2d2d2d;
+
+        &:hover {
+          background: #333;
+        }
+      }
+
+      .albumArt {
+        width: 40px;
+        height: 40px;
+        flex: none;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        margin-right: 15px;
+      }
+
+      .track-details {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .track-title {
+          font-size: 1rem;
+          font-weight: bold;
+          color: #000;
+
+          @media (prefers-color-scheme: dark) {
+            color: #a0a0a0;
+          }
+        }
+
+        .track-owner-info {
+          font-size: 0.85rem;
+          color: #6d6d6d;
+          margin-top: 5px;
+        }
+
+        .track-duration {
+          position: absolute;
+          font-size: 0.85rem;
+          color: #6d6d6d;
+          top: 50%;
+          left: calc(100% - 20px);
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+
+  #themeSwitch {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    top: 5px;
+    right: 5px;
+
+    span.icon {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transition: 0.35s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+      &.dark-blue {
+        svg {
+          fill: #0f1223;
+        }
+      }
+    }
+  }
 }
 
-@mixin grid-utils {
-  display: grid;
-  -webkit-box-align: center;
-  align-items: center;
-  justify-items: center;
+@each $name, $color in $favorite-colors {
+  body.light-theme-#{$name} {
+    background: $color;
+    background: -webkit-linear-gradient($color, #fff);
+    background: linear-gradient($color, #fff);
+  }
+}
+
+body[class*="light-theme-"] {
+  .search-container {
+    background-color: #fff !important;
+
+    .header {
+      box-shadow: 0 0 2px 1px #c3c3c3;
+    }
+  }
+
+  #themeSwitch .lightThemeIcon {
+    @include hide-transform;
+  }
+
+  ::-webkit-scrollbar {
+    background: #fff;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #007ee5;
+  }
+
+  .container {
+    .title {
+      color: #fff;
+    }
+
+    .logo svg {
+      fill: #fff;
+    }
+
+    .primary-search {
+      input {
+        background: #fff;
+        color: unset;
+
+        &:focus {
+          background: #fff;
+        }
+      }
+
+      svg {
+        .search-circle,
+        .search-stroke-path {
+          stroke: #200e32;
+        }
+      }
+    }
+  }
+
+  .homeScreenSuggestions {
+    .show-all-results-button {
+      background: #fff;
+      color: unset;
+
+      &:hover {
+        background: #e4f1ff;
+      }
+    }
+
+    .suggestion {
+      background: #fff;
+      box-shadow: inset 0 -1px 0 0 #efefef;
+
+      &:hover {
+        background: #e4f1ff;
+      }
+
+      .track-details {
+        .track-title {
+          color: #000;
+        }
+      }
+    }
+  }
+}
+
+body.dark-theme {
+  @include darkThemeGradient;
+
+  ::-webkit-scrollbar {
+    background: rgb(49, 49, 49);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(124, 124, 124);
+  }
+
+  .container {
+    .title {
+      color: #797979;
+    }
+
+    .logo svg {
+      fill: #797979;
+    }
+
+    .primary-search {
+      input {
+        background: #292929;
+        color: #a2a2a2;
+
+        &:focus {
+          background: #333;
+        }
+      }
+
+      svg {
+        .search-circle,
+        .search-stroke-path {
+          stroke: #fff;
+        }
+      }
+    }
+  }
+
+  .search-container {
+    background-color: #0f1223;
+  }
+
+  #themeSwitch .darkThemeIcon {
+    @include hide-transform;
+  }
+
+  .homeScreenSuggestions {
+    .show-all-results-button {
+      background: #222;
+      color: #929292;
+
+      &:hover {
+        background: #1d1d1d;
+      }
+    }
+
+    .suggestion {
+      background: #212121;
+      box-shadow: inset 0 -1px 0 0 #2d2d2d;
+
+      &:hover {
+        background: #333;
+      }
+
+      .track-details {
+        .track-title {
+          color: #a0a0a0;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @include darkThemeGradient;
+  }
 }

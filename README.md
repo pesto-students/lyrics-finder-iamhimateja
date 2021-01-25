@@ -1,7 +1,7 @@
 ## Deployment Link
 
 Deploy your project on Netlify/GitHub pages/etc and put your deployed link here.
-Link:
+Link: https://lyrics-finder-himu.netlify.app
 
 # Instruction
 
@@ -43,3 +43,7 @@ The above API does not return data when it is under load. You are free to look f
 # Commands
 
 - Run `npm run develop` to run app locally (if you are using pure html+css+JS) otherwise use create-react-app.
+
+
+# References and Credits:
+Favicon - https://thenounproject.com/search/?q=lyrics&i=3020237

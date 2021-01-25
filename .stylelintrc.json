@@ -6,7 +6,7 @@
   "rules": {
     "at-rule-no-unknown": null,
     "scss/at-extend-no-missing-placeholder": true,
-    "scss/dollar-variable-pattern": "^foo",
+    "scss/dollar-variable-pattern": null,
     "scss/selector-no-redundant-nesting-selector": true
   }
 }
