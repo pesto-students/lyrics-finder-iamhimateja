@@ -58,17 +58,18 @@ export default class SearchBar {
           .then(results => {
             const data = results.data;
             if (Array.isArray(data) && data.length > 0) {
-              $classes(".suggestion", this.primarySuggestionsContainer).forEach(suggestion => suggestion.remove());
+              this.primarySuggestionsContainer.innerHTML = "";
               for (const result of data) {
                 let suggestion = new Suggestion(result);
                 suggestion.appendTo(this.primarySuggestionsContainer);
               }
-              if (!$class(".show-all-results-button", this.primarySuggestionsContainer)) {
-                this.primarySuggestionsContainer.innerHTML += '<div class="show-all-results-button">Show all results</div>';
-                this.showAllResultsButton = $class(".show-all-results-button", this.primarySuggestionsContainer);
-              }
+              this.primarySuggestionsContainer.innerHTML += `<div class="show-all-results-button" onClick="console.log("hello");">Show all results</div>`;
+              this.showAllResultsButton = $class(".show-all-results-button", this.primarySuggestionsContainer);
               this.primarySuggestionsContainer.classList.add("open");
               this.showAllResultsButton.classList.add("show");
+              // this.showAllResultsButton.addEventListener("click", event => {
+              //   console.log("hello");
+              // });
             }
           })
           .catch((error) => {

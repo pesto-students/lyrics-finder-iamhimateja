@@ -13,14 +13,6 @@
     "type": "git",
     "url": "git@github.com:pesto-students/lyrics-finder-iamhimateja.git"
   },
-  "keywords": [
-    "webpack",
-    "startkit",
-    "frontend",
-    "es6",
-    "javascript",
-    "webdev"
-  ],
   "author": "Himateja Merlapaka",
   "license": "MIT",
   "devDependencies": {
