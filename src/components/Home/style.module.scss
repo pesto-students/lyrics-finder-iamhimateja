@@ -1,0 +1,47 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.container {
+  display: flex;
+  height: 100vh;
+  max-width: 60vw;
+  margin: 0 auto;
+  padding-top: 10vw;
+  align-items: center;
+  flex-direction: column;
+
+  .logo {
+    display: block;
+    width: 10vw;
+    height: 10vw;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-family: Bungee, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+    font-size: 2.5em;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+
+    @media (prefers-color-scheme: dark) {
+      color: #fff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      color: #797979;
+    }
+  }
+}
+
+:global([class*="light-theme-"]) :local(.container) {
+  :local(.title) {
+    color: #fff;
+  }
+}
+
+// stylelint-disable no-descending-specificity
+:global(.dark-theme) :local(.container) {
+  :local(.title) {
+    color: #797979;
+  }
+}

@@ -1,0 +1,39 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+@import "../../styles/mixins";
+
+#themeSwitch {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  top: 5px;
+  right: 5px;
+
+  span.icon {
+    &.darkThemeIcon,
+    &.lightThemeIcon {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transition: 0.35s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+      &.dark-blue {
+        svg {
+          fill: #0f1223;
+        }
+      }
+    }
+  }
+}
+
+:global(.dark-theme) :local(.icon.darkThemeIcon) {
+  @include hide-transform;
+}
+
+:global([class*="light-theme-"]) :local(.icon.lightThemeIcon) {
+  @include hide-transform;
+}

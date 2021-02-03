@@ -1,0 +1,75 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.primarySearch {
+  position: relative;
+  width: calc(100% - 15vw);
+  margin-top: 25px;
+  transition-delay: 0.7s;
+
+  .primarySearchInput {
+    padding: 10px 60px 10px 25px;
+    width: 100%;
+    height: 50px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    border: 0;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    @media (prefers-color-scheme: light) {
+      background: #fff;
+      color: unset;
+
+      &:focus {
+        background: #fff;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: #292929;
+      color: #a2a2a2;
+
+      &:focus {
+        background: #333;
+      }
+    }
+  }
+
+  .icon {
+    position: absolute;
+    width: 50px;
+    top: 0;
+    right: 0;
+    opacity: 0.5;
+    height: 100%;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+:global([class*="light-theme-"]) :local(.primarySearch) {
+  :local(.primarySearchInput) {
+    background: #fff;
+    color: unset;
+
+    &:focus {
+      background: #fff;
+    }
+  }
+}
+
+// stylelint-disable no-descending-specificity
+:global(.dark-theme) :local(.primarySearch) {
+  :local(.primarySearchInput) {
+    background: #292929;
+    color: #a2a2a2;
+
+    &:focus {
+      background: #333;
+    }
+  }
+}

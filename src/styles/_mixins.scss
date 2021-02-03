@@ -1,0 +1,31 @@
+//! TODO: make more configurable by adding start and end to the gradients.
+$favorite-colors: ("dark-green": #2b4e72, "light-red": #f04155, "light-green": #248f8d, "light-blue": #2790b0, "light-green-2": #027b7f);
+
+@mixin grid-utils {
+  display: grid;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-items: center;
+}
+
+@mixin darkThemeGradient {
+  background: #434343;
+  background: -webkit-linear-gradient(#000, #434343);
+  background: linear-gradient(#000, #434343);
+
+  // background-color: #2d3436;
+  // background-image: linear-gradient(0deg, #0a1921 0%, #000000 40%);
+}
+
+@mixin hide-transform {
+  transform: translate(-50%, -50%) scale(0) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+@mixin transform-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,0 +1,19 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.mainContainer {
+  @media (prefers-color-scheme: dark) {
+    fill: #fff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    fill: #797979;
+  }
+}
+
+:global(.dark-theme) :local(.mainContainer) {
+  fill: #797979;
+}
+
+:global([class*="light-theme-"]) :local(.mainContainer) {
+  fill: #fff;
+}
