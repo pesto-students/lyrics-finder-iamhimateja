@@ -1,7 +1,7 @@
 ## Deployment Link
 
 Deploy your project on Netlify/GitHub pages/etc and put your deployed link here.
-Link: https://lyrics-finder-himu.netlify.app
+Link: https://lyrics-finder-react-himu.netlify.app
 
 # Instruction
 

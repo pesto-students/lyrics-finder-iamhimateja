@@ -1,38 +1,32 @@
-import React from "react";
-import { debounce, isValidWordKey, wordCount } from "../../utils/domUtils";
+import React, { Component } from 'react';
+import { debounce, isValidWordKey, wordCount, delay } from "../../utils/domUtils";
 import LyricsApi from "../../utils/lyricsApi";
 import styles from "./style.module.scss";
 import SearchIcon from "../../icons/search-icon/searchIcon";
-import Suggestion from "../Suggestions/component";
+import Suggestions from "../Suggestions/component";
+import SearchInput from '../SearchInput/component';
 
-export default class MainSearch extends React.Component {
+export default class MainSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      searchSuggestions: [],
+      openSuggestionsDropdown: false
+    };
     this.lyricsApi = new LyricsApi();
-    this.defaultDebounceDelay = 1000;
-    this.suggestionsFunction = this.suggestionsFunction.bind(this);
+    this.defaultDebounceTimer = 500; // milliseconds
   }
 
-  suggestionsFunction(event) {
+  suggestionsFunction = (event) => {
     if (isValidWordKey(event.keyCode) && wordCount(event.target.value) >= 1) {
       this.lyricsApi.searchTracks(event.target.value)
         .then(results => {
           const data = results.data;
           if (Array.isArray(data) && data.length > 0) {
-            console.log(data);
-            // this.primarySuggestionsContainer.innerHTML = "";
-            // for (const result of data) {
-            // let suggestion = new Suggestion(result);
-            // suggestion.appendTo(this.primarySuggestionsContainer);
-            // }
-            // this.primarySuggestionsContainer.innerHTML += `<div class="show-all-results-button" onClick="console.log("hello");">Show all results</div>`;
-            // this.showAllResultsButton = $class(".show-all-results-button", this.primarySuggestionsContainer);
-            // this.primarySuggestionsContainer.classList.add("open");
-            // this.showAllResultsButton.classList.add("show");
-            // this.showAllResultsButton.addEventListener("click", event => {
-            //   console.log("hello");
-            // });
+            this.setState({
+              searchSuggestions: data,
+              openSuggestionsDropdown: true
+            });
           }
         })
         .catch((error) => {
@@ -41,16 +35,51 @@ export default class MainSearch extends React.Component {
     }
   }
 
+  showSuggestionsDropdown = (event) => {
+    if (this.state.searchSuggestions.length > 0) {
+      let stateCopy = Object.assign({}, this.state);
+      stateCopy.openSuggestionsDropdown = true;
+      this.setState(stateCopy);
+    }
+  }
+
+  hideSuggestionsDropdown = (event) => {
+    let stateCopy = Object.assign({}, this.state);
+    stateCopy.openSuggestionsDropdown = false;
+
+    // Note to myself & you
+    // Reason for the delay to hide the dropdown
+    // When we try to click on ShowAllResultsButton, it won't be triggered
+    // it took me a lot of time to realise that as the input loses it's focus, the button will be hidden from viewport before we click it
+    // It may seem that we've clicked it, but it is just an illusion. it is literally BRAINF**K
+
+    delay(100).then(() => {
+      this.setState(stateCopy);
+    });
+  }
+
+  handleShowAllResults = (event) => {
+    console.log("hello");
+  }
+
   render() {
     return (
       <>
         <section className={styles.primarySearch}>
-          <input type="text" className={styles.primarySearchInput} placeholder="Search lyrics by artist or song name" onKeyUp={debounce(this.suggestionsFunction, this.defaultDebounceDelay)} />
+          <SearchInput
+            onKeyUp={debounce(this.suggestionsFunction, this.defaultDebounceTimer)}
+            onFocus={this.showSuggestionsDropdown}
+            onBlur={this.hideSuggestionsDropdown}
+          />
           <span className={`${styles.icon} ${styles.primarySearchButton}`}>
             <SearchIcon />
           </span>
         </section>
-        <Suggestion />
+        <Suggestions
+          suggestions={this.state.searchSuggestions}
+          isOpen={this.state.openSuggestionsDropdown}
+          handleShowAllResults={this.handleShowAllResults}
+        />
       </>
     );
   }

@@ -52,7 +52,7 @@ const delay = async (seconds) => {
   );
 };
 
-function formatDuration(duration) {
+function formatTrackDuration(duration) {
   // ~~ => Shorthand for Math.floor
   // http://rocha.la/JavaScript-bitwise-operators-in-practice
   var hours = ~~(duration / 3600);
@@ -86,7 +86,7 @@ export {
   debounce,
   isValidWordKey,
   delay,
-  formatDuration,
+  formatTrackDuration,
   setInitialColorScheme,
   COLOR_SCHEMES
 };

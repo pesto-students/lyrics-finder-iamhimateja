@@ -15,7 +15,7 @@
     display: block;
   }
 
-  .show-all-results-button {
+  .showAllResultsButton {
     display: none;
     text-align: center;
     padding: 15px;
@@ -41,68 +41,27 @@
       display: block;
     }
   }
+}
 
-  .suggestion {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+:global([class*="light-theme-"]) :local(.homeScreenSuggestions) {
+  :local(.showAllResultsButton) {
     background: #fff;
-    box-shadow: inset 0 -1px 0 0 #efefef;
-    transition: all 0.3s ease-in-out;
+    color: unset;
 
     &:hover {
       background: #e4f1ff;
     }
+  }
+}
 
-    @media (prefers-color-scheme: dark) {
-      background: #212121;
-      box-shadow: inset 0 -1px 0 0 #2d2d2d;
+// stylelint-disable no-descending-specificity
+:global(.dark-theme) :local(.homeScreenSuggestions) {
+  :local(.showAllResultsButton) {
+    background: #222;
+    color: #929292;
 
-      &:hover {
-        background: #333;
-      }
-    }
-
-    .albumArt {
-      width: 40px;
-      height: 40px;
-      flex: none;
-      background-size: cover;
-      background-repeat: no-repeat;
-      border-radius: 50%;
-      margin-right: 15px;
-    }
-
-    .track-details {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-
-      .track-title {
-        font-size: 1rem;
-        font-weight: bold;
-        color: #000;
-
-        @media (prefers-color-scheme: dark) {
-          color: #a0a0a0;
-        }
-      }
-
-      .track-owner-info {
-        font-size: 0.85rem;
-        color: #6d6d6d;
-        margin-top: 5px;
-      }
-
-      .track-duration {
-        position: absolute;
-        font-size: 0.85rem;
-        color: #6d6d6d;
-        top: 50%;
-        left: calc(100% - 20px);
-        transform: translate(-50%, -50%);
-      }
+    &:hover {
+      background: #1d1d1d;
     }
   }
 }
