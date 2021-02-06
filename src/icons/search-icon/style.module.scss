@@ -1,0 +1,35 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.searchIcon {
+  position: absolute;
+  width: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .searchCircle,
+  .searchStrokePath {
+    @media (prefers-color-scheme: light) {
+      stroke: #200e32;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      stroke: #fff;
+    }
+  }
+}
+
+:global(.dark-theme) :local(.searchIcon) {
+  :local(.searchCircle),
+  :local(.searchStrokePath) {
+    stroke: #fff;
+  }
+}
+
+// stylelint-disable no-descending-specificity
+:global([class*="light-theme-"]) :local(.searchIcon) {
+  :local(.searchCircle),
+  :local(.searchStrokePath) {
+    stroke: #200e32;
+  }
+}
