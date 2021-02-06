@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
 import App from './components/App/App';
+import SearchResultsPage from "./components/SearchResultsPage/component";
 import { $id, setInitialColorScheme, randomItem, COLOR_SCHEMES } from "./utils/domUtils";
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 window.lightThemeClass = randomItem(COLOR_SCHEMES);
 setInitialColorScheme();
@@ -20,7 +22,13 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Switch>
+        <Route path="/" exact component={App}></Route>
+        <Route path="/search" exact component={SearchResultsPage}></Route>
+        <Route path="/lyrics" exact component={SearchResultsPage}></Route>
+      </Switch>
+    </Router>
   </React.StrictMode>,
   $id('root')
 );
