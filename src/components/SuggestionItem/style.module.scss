@@ -33,8 +33,12 @@
     width: 100%;
 
     .trackTitle {
+      width: calc(100% - 10vw);
       font-size: 1rem;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       color: #000;
     }
 
