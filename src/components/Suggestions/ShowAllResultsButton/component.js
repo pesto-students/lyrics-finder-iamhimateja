@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import styles from '../style.module.scss';
+import { Link } from "react-router-dom";
 
 export default class ShowAllResultsButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   render() {
     return (
-      <div
+      <Link
         className={`${styles.showAllResultsButton} ${this.props.isOpen ? styles.show : ""}`}
-        onClick={this.props.handleClick}
+        to={{
+          pathname: "/search",
+          search: `?q=${this.props.searchQuery}`
+        }}
       >
         Show all results
-      </div>
+      </Link>
     );
   }
 }
