@@ -25,7 +25,7 @@ export default class SearchResult extends PureComponent {
     const albumCoverSmall = album.cover_small;
 
     return (
-      <div data-artist={artistName} data-title={trackTitle} data-album={albumName} className={`${styles.suggestion}${this.props.isSelected ? ` ${styles.isSelected}` : ""}`} id={identifier} onClick={this.props.onClick}>
+      <div className={`${styles.suggestion}${this.props.isSelected ? ` ${styles.isSelected}` : ""}`} id={identifier} onClick={this.props.onClick}>
         <div className={styles.albumArt} style={{ backgroundImage: `url('${albumCoverSmall}')` }}></div>
         <div className={styles.trackDetails}>
           <span className={styles.trackTitle}>{trackTitle}</span>

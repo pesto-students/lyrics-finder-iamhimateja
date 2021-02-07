@@ -76,6 +76,10 @@
       height: 40px;
       top: 0;
       right: 5px;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
 
       svg {
         @include transform-center;

@@ -16,10 +16,10 @@ export default class Navigation extends Component {
           <Logo container="mainContainer" />
         </Link>
         <div className={styles.searchWrap}>
-          <input type="text" placeholder="Search lyrics by artist or song name" className={styles.searchInput} defaultValue={this.props.searchQuery || ""} />
-          <span className={styles.searchButton}>
+          <input type="text" placeholder="Search lyrics by artist or song name" className={styles.searchInput} defaultValue={this.props.searchQuery || ""} onKeyUp={this.props.updateSearchQuery} />
+          <button className={styles.searchButton} onClick={this.props.onClick}>
             <SearchIcon container="homeSearchIcon" />
-          </span>
+          </button>
         </div>
       </div>
     );

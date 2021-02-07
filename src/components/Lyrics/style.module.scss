@@ -1,0 +1,238 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+@import "../../styles/mixins";
+
+.lyricsSection {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  transition: all 0.3s ease-in-out;
+
+  &.show {
+    flex: 2;
+  }
+
+  &.hide {
+    flex: 0;
+
+    * {
+      opacity: 0;
+      visibility: hidden;
+      display: none;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px;
+    border-radius: 50%;
+    width: 2vw;
+    height: 2vw;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+    opacity: 0.5;
+    cursor: pointer;
+    z-index: 2;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .selectedTrackInfo {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding: 25px;
+    overflow: hidden;
+
+    .blurredImg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      filter: contrast(10) sepia(1) saturate(50) blur(150px);
+      user-select: none;
+      z-index: -1;
+    }
+
+    .albumArt {
+      width: 10vw;
+      height: 10vw;
+      flex: none;
+      background-size: cover;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .trackDetails {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .trackTitle {
+        width: calc(100% - 10vw);
+        max-width: 600px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #969696;
+      }
+
+      .trackOwnerInfo {
+        font-size: 1rem;
+        color: #a9a9a9;
+        margin-top: 10px;
+        max-width: 600px;
+        line-height: 1.5;
+      }
+
+      .trackDuration {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #6d6d6d;
+      }
+    }
+
+    .actions {
+      position: absolute;
+      display: flex;
+      bottom: 2px;
+
+      .playButton {
+        margin-right: 10px;
+        opacity: 0.4;
+        cursor: progress !important;
+      }
+
+      .playButton,
+      .downloadButton {
+        padding: 5px 15px;
+        background: rgba(0, 0, 0, 0.08);
+        border: 0;
+        border-radius: 50px;
+        color: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        text-decoration: none;
+        font-size: 0.9em;
+        vertical-align: unset;
+        appearance: none;
+
+        .btnText,
+        svg {
+          display: inline-flex;
+          vertical-align: middle;
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+          fill: rgba(255, 255, 255, 0.35);
+        }
+
+        &:hover,
+        &:focus {
+          box-shadow: none;
+          background: rgba(255, 255, 255, 0.54);
+          color: rgba(0, 26, 74, 0.65);
+
+          svg {
+            fill: rgba(0, 26, 74, 0.65);
+          }
+        }
+      }
+    }
+  }
+
+  .lyricsContainer {
+    position: relative;
+    padding: 10px;
+    flex: 4;
+    background: #000;
+    overflow-y: scroll;
+
+    .lyrics {
+      white-space: pre;
+      color: #6d6d6d;
+      font-size: 1.25rem;
+      padding: 30px;
+      padding-bottom: 50px;
+      line-height: 2.5;
+    }
+  }
+
+  .playerContainer {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 6vh;
+    background: rgba(0, 0, 0, 0.09);
+    bottom: 0;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -1px 0 0 #5a5a5a;
+
+    .player {
+      position: relative;
+
+      .playerAlbumArt {
+        width: 50px;
+        height: 50px;
+        background-size: cover;
+        position: absolute;
+        top: calc(-6vh / 2);
+        left: calc(6vh / 2);
+        border-radius: 50%;
+        box-shadow: 0 0 0 10px #5a5a5a;
+
+        &.playing {
+          animation: rotation 4s infinite linear;
+        }
+
+        &::after {
+          content: "";
+          width: 15px;
+          height: 15px;
+          background: #000;
+          border-radius: 50%;
+
+          @include transform-center;
+        }
+      }
+    }
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+// :global([class*="light-theme-"]) {
+//   :local(.container) {
+//     background-color: #fff;
+//   }
+// }
+
+// // stylelint-disable no-descending-specificity
+// :global(.dark-theme) {
+//   :local(.container) {
+//     background-color: #0f1223;
+//   }
+// }
