@@ -178,8 +178,16 @@ export default class SearchResultsPage extends Component {
     this.removeParamFromSearchHistory("selected-item");
   }
 
-  paginateResults = async (event) => {
-    return await fetch(`https://cors-anywhere.herokuapp.com/${this.state.nextPage}`, {
+  fetchPreviousPage = async (event) => {
+    this.paginateSearchResults(this.state.prevPage);
+  }
+
+  fetchNextPage = async (event) => {
+    this.paginateSearchResults(this.state.nextPage);
+  }
+
+  paginateSearchResults = async (pageURL) => {
+    return await fetch(`https://cors-anywhere.herokuapp.com/${pageURL}`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -226,8 +234,8 @@ export default class SearchResultsPage extends Component {
                 {this.state.searchSuggestions.map(suggestion => <SearchResult key={suggestion.id} data={suggestion} searchQuery={this.state.searchQuery} isSelected={this.state.selectedItem == suggestion.id} onClick={this.handleSearchResultClick} />)}
               </div>
               <div className={styles.pagination}>
-                <button className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.paginateResults}>Previous</button>
-                <button className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.paginateResults}>Next</button>
+                <button className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.fetchPreviousPage}>Previous</button>
+                <button className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.fetchNextPage}>Next</button>
               </div>
             </div>
             <Lyrics
