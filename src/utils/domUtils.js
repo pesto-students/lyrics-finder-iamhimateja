@@ -26,7 +26,7 @@ const isMobileDevice = () => {
 const randomItem = (array) => array[Math.floor(Math.random() * array.length)];
 
 const isValidWordKey = (keyCode) => {
-  const modifierKeys = [16, 17, 18, 20, 33, 34, 35, 36, 37, 38, 39, 40, 46, 8, 91, 93];
+  const modifierKeys = [8, 16, 17, 18, 20, 33, 34, 35, 36, 37, 38, 39, 40, 46, 91, 93];
   if (modifierKeys.includes(keyCode)) {
     return false;
   }

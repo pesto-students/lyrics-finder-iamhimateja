@@ -11,10 +11,17 @@
   cursor: pointer;
   background: #fff;
   box-shadow: inset 0 -1px 0 0 #efefef;
-  transition: all 0.3s ease-in-out;
+  transition: all 200ms ease-in-out;
 
   &:hover {
     background: #e4f1ff;
+  }
+
+  &.isSelected {
+    background: rgba(95, 255, 0, 0.01) !important;
+    background: linear-gradient(to right, #000, #1d1d1d) !important;
+    box-shadow: inset 5px 0 0 0 #6d6d6d !important;
+    padding-left: 15px;
   }
 
   .albumArt {
@@ -34,6 +41,7 @@
 
     .trackTitle {
       width: calc(100% - 10vw);
+      max-width: 400px;
       font-size: 1rem;
       font-weight: bold;
       white-space: nowrap;
@@ -46,6 +54,8 @@
       font-size: 0.85rem;
       color: #6d6d6d;
       margin-top: 5px;
+      max-width: 400px;
+      line-height: 1.5;
     }
 
     .trackDuration {

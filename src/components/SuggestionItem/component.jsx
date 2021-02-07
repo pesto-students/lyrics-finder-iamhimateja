@@ -28,11 +28,7 @@ export default class SuggestionItem extends PureComponent {
     return (
       <Link className={styles.trackAnchor} to={{
         pathname: "/lyrics",
-        search: `?query=${this.props.searchQuery}&selected-item=${identifier}`,
-        state: {
-          searchQuery: this.props.searchQuery,
-          selectedItem: identifier
-        }
+        search: `?query=${this.props.searchQuery}&selected-item=${identifier}`
       }}>
         <div className={styles.suggestion} id={identifier}>
           <div className={styles.albumArt} style={{ backgroundImage: `url('${albumCoverSmall}')` }}></div>

@@ -5,7 +5,7 @@ import App from './components/App/App';
 import SearchResultsPage from "./components/SearchResultsPage/component";
 import { $id, setInitialColorScheme, randomItem, COLOR_SCHEMES } from "./utils/domUtils";
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
 
 window.lightThemeClass = randomItem(COLOR_SCHEMES);
 setInitialColorScheme();
@@ -24,9 +24,8 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-        <Route path="/" exact component={App}></Route>
-        <Route path="/search" exact component={SearchResultsPage}></Route>
-        <Route path="/lyrics" exact component={SearchResultsPage}></Route>
+        <Route path="/" exact component={withRouter(App)}></Route>
+        <Route path="/lyrics" exact component={withRouter(SearchResultsPage)}></Route>
       </Switch>
     </Router>
   </React.StrictMode>,

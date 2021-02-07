@@ -5,12 +5,14 @@ import styles from "./style.module.scss";
 import SearchIcon from "../../icons/search-icon/searchIcon";
 import Suggestions from "../Suggestions/component";
 import SearchInput from '../SearchInput/component';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 export default class MainSearch extends Component {
   state = {
     searchSuggestions: [],
     openSuggestionsDropdown: false,
-    searchQuery: ""
+    searchQuery: "",
+    searchInputValue: ""
   };
 
   is_mounted = false;
@@ -29,16 +31,25 @@ export default class MainSearch extends Component {
     this.is_mounted = false;
   }
 
-  suggestionsFunction = (event) => {
-    if (isValidWordKey(event.keyCode) && wordCount(event.target.value) >= 1) {
-      this.lyricsApi.searchTracks(event.target.value)
+  updateSingleStateProperty = (property, value) => {
+    if (this.is_mounted) {
+      let stateCopy = Object.assign({}, this.state);
+      stateCopy[property] = value;
+      this.setState(stateCopy);
+    }
+  }
+
+  fetchTracksData = (searchQuery) => {
+    if (wordCount(searchQuery) >= 1) {
+      this.lyricsApi.searchTracks(searchQuery)
         .then(results => {
           const data = results.data;
           if (Array.isArray(data) && data.length > 0 && this.is_mounted) {
             this.setState({
               searchSuggestions: data,
               openSuggestionsDropdown: true,
-              searchQuery: event.target.value
+              searchQuery: searchQuery,
+              searchInputValue: searchQuery
             });
           }
         })
@@ -48,11 +59,16 @@ export default class MainSearch extends Component {
     }
   }
 
+  suggestionsFunction = (event) => {
+    this.updateSingleStateProperty("searchInputValue", event.target.value);
+    if (isValidWordKey(event.keyCode)) {
+      this.fetchTracksData(event.target.value);
+    }
+  }
+
   showSuggestionsDropdown = (event) => {
     if (this.state.searchSuggestions.length > 0 && this.is_mounted) {
-      let stateCopy = Object.assign({}, this.state);
-      stateCopy.openSuggestionsDropdown = true;
-      this.setState(stateCopy);
+      this.updateSingleStateProperty("openSuggestionsDropdown", true);
     }
   }
 
@@ -84,9 +100,18 @@ export default class MainSearch extends Component {
             onFocus={this.showSuggestionsDropdown}
             onBlur={this.hideSuggestionsDropdown}
           />
-          <span className={`${styles.icon} ${styles.primarySearchButton}`}>
-            <SearchIcon />
-          </span>
+          <Link
+            to={{
+              pathname: "/lyrics",
+              search: `?query=${this.state.searchInputValue}`,
+              state: {
+                searchQuery: this.state.searchInputValue
+              }
+            }}
+            className={`${styles.icon} ${styles.primarySearchButton} ${(wordCount(this.state.searchInputValue) >= 1) ? "" : styles.disabled}`}
+          >
+            <SearchIcon container="homeSearchIcon" />
+          </Link>
         </section>
         <Suggestions
           suggestions={this.state.searchSuggestions}
