@@ -183,12 +183,12 @@ export default class SearchResultsPage extends Component {
   }
 
   fetchNextPage = async (event) => {
-    return await fetch(`http://alloworigin.com/get?url=${this.state.nextPage}`, {
+    return await fetch(`https://cors-anywhere.herokuapp.com/${this.state.nextPage}`, {
       method: "GET",
       mode: "cors",
       headers: {
-        'Access-Control-Allow-Origin': '*',
-      }
+        'Access-Control-Allow-Origin': '*'
+      },
     }).then(response => response.json())
       .then(results => {
         console.log('====================================');
