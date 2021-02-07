@@ -178,11 +178,7 @@ export default class SearchResultsPage extends Component {
     this.removeParamFromSearchHistory("selected-item");
   }
 
-  fetchPreviousPage = async (event) => {
-
-  }
-
-  fetchNextPage = async (event) => {
+  paginateResults = async (event) => {
     return await fetch(`https://cors-anywhere.herokuapp.com/${this.state.nextPage}`, {
       method: "GET",
       mode: "cors",
@@ -191,9 +187,20 @@ export default class SearchResultsPage extends Component {
       },
     }).then(response => response.json())
       .then(results => {
-        console.log('====================================');
-        console.log(results);
-        console.log('====================================');
+        const { data, next, prev, total } = results;
+        if (Array.isArray(data) && data.length > 0 && this.is_mounted) {
+          this.updateMultipleStateProperties({
+            searchSuggestions: data,
+            searchQuery: this.state.searchInputValue,
+            isLyricsOpen: false,
+            currentLyrics: "",
+            selectedItem: "",
+            nextPage: next,
+            prevPage: prev,
+            totalResults: total
+          });
+          this.updateHistoryState();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -219,8 +226,8 @@ export default class SearchResultsPage extends Component {
                 {this.state.searchSuggestions.map(suggestion => <SearchResult key={suggestion.id} data={suggestion} searchQuery={this.state.searchQuery} isSelected={this.state.selectedItem == suggestion.id} onClick={this.handleSearchResultClick} />)}
               </div>
               <div className={styles.pagination}>
-                <button className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.fetchPreviousPage}>Previous</button>
-                <button className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.fetchNextPage}>Next</button>
+                <button className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.paginateResults}>Previous</button>
+                <button className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.paginateResults}>Next</button>
               </div>
             </div>
             <Lyrics
