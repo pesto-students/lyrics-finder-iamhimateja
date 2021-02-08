@@ -4,7 +4,7 @@ import './styles/index.scss';
 import { $id, setInitialColorScheme, randomItem, COLOR_SCHEMES } from "./utils/domUtils";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+document.body.classList.remove("search-results");
 window.lightThemeClass = randomItem(COLOR_SCHEMES);
 setInitialColorScheme();
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {

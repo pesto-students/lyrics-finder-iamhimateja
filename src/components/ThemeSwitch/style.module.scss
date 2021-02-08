@@ -40,7 +40,7 @@
   @include hide-transform;
 }
 
-:global([class*="light-theme-"]) :local(.icon.darkThemeIcon) {
+:global([class*="light-theme-"].search-results) :local(.icon.darkThemeIcon) {
   svg {
     fill: #000;
   }
