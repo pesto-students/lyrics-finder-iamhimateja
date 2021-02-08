@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 /* stylelint-disable selector-pseudo-class-no-unknown */
 
 @import "../../styles/mixins";
@@ -37,4 +38,10 @@
 
 :global([class*="light-theme-"]) :local(.icon.lightThemeIcon) {
   @include hide-transform;
+}
+
+:global([class*="light-theme-"]) :local(.icon.darkThemeIcon) {
+  svg {
+    fill: #000;
+  }
 }

@@ -1,5 +1,30 @@
 /* stylelint-disable selector-pseudo-class-no-unknown */
 
+@import "../../styles/mixins";
+
+.defaultDiv {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
+  .info {
+    @include transform-center;
+
+    color: #757575;
+    text-align: center;
+    padding: 5vw;
+    box-shadow: 0 0 0 1px #424242, inset 0 0 50px 10px rgba(53, 53, 53, 0.4);
+    border-radius: 50px;
+
+    .emoticon {
+      display: block;
+      font-size: 10vw;
+      margin-bottom: 2.5vh;
+      filter: grayscale(1) contrast(2);
+    }
+  }
+}
+
 .container {
   position: relative;
   height: 100vh;
@@ -14,6 +39,10 @@
     position: relative;
     display: flex;
     padding-top: 60px;
+
+    &.hideResults {
+      display: none;
+    }
 
     .results,
     .lyricsContainer {
@@ -31,9 +60,7 @@
         left: 0;
         height: 50px;
         width: 100%;
-        color: #888;
         z-index: 1;
-        background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(10px);
         font-size: 0.75em;
         letter-spacing: 5px;
@@ -47,7 +74,7 @@
       .resultsOverflow {
         position: relative;
         padding-top: 50px;
-        max-height: calc(100vh - 110px);
+        max-height: calc(100vh - (6vh + 60px));
         overflow-y: scroll;
       }
 
@@ -59,18 +86,16 @@
         width: 100%;
         height: 6vh;
         justify-content: center;
-        padding: 10px;
+        padding: 1.5vh;
 
         button {
           &.previous,
           &.next {
-            padding: 5px 15px;
+            padding: 0.5vh 1vw;
             margin: 0 10px;
             background: none;
             border: 0;
             outline: none;
-            color: #fff;
-            box-shadow: 0 0 0 1px #fff;
             border-radius: 50px;
             opacity: 0.6;
             cursor: pointer;
@@ -83,8 +108,10 @@
               box-shadow: none;
             }
 
-            &.disable {
+            &.disable,
+            &:disabled {
               opacity: 0.25;
+              cursor: not-allowed;
               pointer-events: none;
             }
           }
@@ -103,15 +130,69 @@
   }
 }
 
-// :global([class*="light-theme-"]) {
-//   :local(.container) {
-//     background-color: #fff;
-//   }
-// }
+:global([class*="light-theme-"]) {
+  :local(.container) {
+    background-color: #fff;
 
-// // stylelint-disable no-descending-specificity
-// :global(.dark-theme) {
-//   :local(.container) {
-//     background-color: #0f1223;
-//   }
-// }
+    .resultsContainer {
+      .results {
+        .resultsHeader {
+          color: #272727;
+          background: rgba(255, 255, 255, 0.3);
+          box-shadow: 0 1px 0 0 #d6d6d6;
+        }
+
+        .pagination {
+          button {
+            &.previous,
+            &.next {
+              color: #0f6af9;
+              box-shadow: 0 0 0 1px #0f6af9;
+
+              &:hover {
+                background: #0f6af9;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  :local(.defaultDiv) {
+    .info {
+      color: #353535;
+      box-shadow: 0 0 0 1px #f5f5f5, inset 0 0 50px 10px rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+// stylelint-disable no-descending-specificity
+:global(.dark-theme) {
+  :local(.container) {
+    .resultsContainer {
+      .results {
+        .resultsHeader {
+          color: #888;
+          background: rgba(0, 0, 0, 0.3);
+        }
+
+        .pagination {
+          button {
+            &.previous,
+            &.next {
+              color: #fff;
+              box-shadow: 0 0 0 1px #fff;
+
+              &:hover {
+                background: #fff;
+                color: #000;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

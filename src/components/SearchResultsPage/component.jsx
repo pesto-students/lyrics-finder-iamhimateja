@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from "./style.module.scss";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { wordCount } from '../../utils/domUtils';
+import { wordCount, getRandomNumber } from '../../utils/domUtils';
 import Navigation from '../Navigation/component';
 import ThemeSwitch from "../ThemeSwitch/component";
 import SearchResult from "../SearchResult/component";
@@ -10,6 +10,7 @@ import Lyrics from '../Lyrics/component';
 
 export default class SearchResultsPage extends Component {
   is_mounted = false;
+
   constructor(props) {
     super(props);
     let url = new URL(window.location.href);
@@ -30,13 +31,22 @@ export default class SearchResultsPage extends Component {
     tempState.nextPage = "";
     tempState.prevPage = "";
     tempState.totalResults = "";
+
+    tempState.loader = {
+      isLoading: false,
+      percentage: 0
+    };
+
     this.state = tempState;
     this.lyricsApi = new LyricsApi();
+    this.loaderInterval = undefined;
   }
 
   componentDidMount() {
     this.is_mounted = true;
+    document.body.classList.add('search-results');
     if (this.state.searchQuery) {
+      this.showLoader();
       this.lyricsApi.searchTracks(this.state.searchQuery)
         .then(results => {
           const { data, next, prev, total } = results;
@@ -45,11 +55,16 @@ export default class SearchResultsPage extends Component {
               searchSuggestions: data,
               nextPage: next,
               prevPage: prev,
-              totalResults: total
+              totalResults: total,
+              loader: {
+                isLoading: true,
+                percentage: 100
+              }
             });
           }
         })
         .then(() => {
+          this.hideLoader();
           if (this.state.selectedItem) {
             this.fetchLyrics(this.state.selectedItem);
           }
@@ -64,35 +79,30 @@ export default class SearchResultsPage extends Component {
     this.is_mounted = false;
   }
 
-  componentDidUpdate() { }
-
-  updateSearchQuery = event => {
-    this.updateSingleStateProperty("searchInputValue", event.currentTarget.value);
+  showLoader = () => {
+    this.hideLoader();
+    let initialWidth = 0,
+      maxWidth = 10;
+    this.loaderInterval = setInterval(() => {
+      if ((initialWidth <= 90 && maxWidth <= 90)) {
+        initialWidth = getRandomNumber(initialWidth, maxWidth);
+        this.updateSingleStateProperty("loader", {
+          isLoading: true,
+          percentage: initialWidth
+        });
+        maxWidth = maxWidth + 10;
+      } else {
+        clearInterval(this.loaderInterval);
+      }
+    }, 100);
   }
 
-  performSearch = event => {
-    if (wordCount(this.state.searchInputValue) >= 1) {
-      this.lyricsApi.searchTracks(this.state.searchInputValue)
-        .then(results => {
-          const { data, next, prev, total } = results;
-          if (Array.isArray(data) && data.length > 0 && this.is_mounted) {
-            this.updateMultipleStateProperties({
-              searchSuggestions: data,
-              searchQuery: this.state.searchInputValue,
-              isLyricsOpen: false,
-              currentLyrics: "",
-              selectedItem: "",
-              nextPage: next,
-              prevPage: prev,
-              totalResults: total
-            });
-            this.updateHistoryState();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  hideLoader = () => {
+    clearInterval(this.loaderInterval);
+    this.updateSingleStateProperty("loader", {
+      isLoading: false,
+      percentage: 0
+    });
   }
 
   updateSingleStateProperty = (property, value) => {
@@ -127,14 +137,53 @@ export default class SearchResultsPage extends Component {
     });
   }
 
+  getTrackDetails = id => {
+    const results = this.state.searchSuggestions.filter(result => result.id == id);
+    return (results.length == 1) ? results[0] : false;
+  }
+
+  updateSearchQuery = event => {
+    this.updateSingleStateProperty("searchInputValue", event.currentTarget.value);
+    if (event.key == "Enter") {
+      this.performSearch();
+    }
+  }
+
   updateSelectedTrack = (trackIdentifier) => {
     this.updateSingleStateProperty("selectedItem", trackIdentifier);
     this.updateHistoryState();
   }
 
-  getTrackDetails = id => {
-    const results = this.state.searchSuggestions.filter(result => result.id == id);
-    return (results.length == 1) ? results[0] : false;
+  performSearch = () => {
+    if (wordCount(this.state.searchInputValue) >= 1) {
+      this.showLoader();
+      this.lyricsApi.searchTracks(this.state.searchInputValue)
+        .then(results => {
+          const { data, next, prev, total } = results;
+          if (Array.isArray(data) && data.length > 0 && this.is_mounted) {
+            this.updateMultipleStateProperties({
+              searchSuggestions: data,
+              searchQuery: this.state.searchInputValue,
+              isLyricsOpen: false,
+              currentLyrics: "",
+              selectedItem: "",
+              nextPage: next,
+              prevPage: prev,
+              totalResults: total,
+              loader: {
+                isLoading: true,
+                percentage: 100
+              }
+            });
+            this.updateHistoryState();
+          }
+        }).then(() => {
+          this.hideLoader();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   fetchLyrics = (id) => {
@@ -148,6 +197,7 @@ export default class SearchResultsPage extends Component {
       } = currentTrack;
 
       const artistName = artist.name;
+      this.showLoader();
       this.lyricsApi.fetchLyrics(artistName, trackTitle)
         .then(results => {
           const { lyrics } = results;
@@ -157,6 +207,8 @@ export default class SearchResultsPage extends Component {
             isLyricsOpen: true
           });
           this.updateSelectedTrack(identifier);
+        }).then(() => {
+          this.hideLoader();
         })
         .catch((error) => {
           console.log(error);
@@ -178,15 +230,16 @@ export default class SearchResultsPage extends Component {
     this.removeParamFromSearchHistory("selected-item");
   }
 
-  fetchPreviousPage = async (event) => {
+  fetchPreviousPage = (event) => {
     this.paginateSearchResults(this.state.prevPage);
   }
 
-  fetchNextPage = async (event) => {
+  fetchNextPage = (event) => {
     this.paginateSearchResults(this.state.nextPage);
   }
 
   paginateSearchResults = async (pageURL) => {
+    this.showLoader();
     return await fetch(`https://cors-anywhere.herokuapp.com/${pageURL}`, {
       method: "GET",
       mode: "cors",
@@ -199,7 +252,7 @@ export default class SearchResultsPage extends Component {
         if (Array.isArray(data) && data.length > 0 && this.is_mounted) {
           this.updateMultipleStateProperties({
             searchSuggestions: data,
-            searchQuery: this.state.searchInputValue,
+            searchQuery: this.state.searchInputValue || this.state.searchQuery,
             isLyricsOpen: false,
             currentLyrics: "",
             selectedItem: "",
@@ -210,44 +263,67 @@ export default class SearchResultsPage extends Component {
           this.updateHistoryState();
         }
       })
+      .then(() => {
+        this.hideLoader();
+      })
       .catch((error) => {
         console.log(error);
       });
   }
 
-
   render() {
-    return (
-      <>
-        <Navigation
-          searchQuery={this.state.searchQuery}
-          updateSearchQuery={this.updateSearchQuery}
-          onClick={this.performSearch}
-        />
-        <div className={`${styles.container} ${this.state.isLyricsOpen ? styles.lyricsOpen : ""}`}>
-          <div className={styles.resultsContainer}>
-            <div className={styles.results}>
-              <div className={styles.resultsHeader}>
-                Search Results
-              </div>
-              <div className={styles.resultsOverflow}>
-                {this.state.searchSuggestions.map(suggestion => <SearchResult key={suggestion.id} data={suggestion} searchQuery={this.state.searchQuery} isSelected={this.state.selectedItem == suggestion.id} onClick={this.handleSearchResultClick} />)}
-              </div>
-              <div className={styles.pagination}>
-                <button className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.fetchPreviousPage}>Previous</button>
-                <button className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.fetchNextPage}>Next</button>
-              </div>
+    if (this.state.searchSuggestions.length == 0) {
+      return (
+        <>
+          <Navigation
+            searchQuery={this.state.searchQuery}
+            updateSearchQuery={this.updateSearchQuery}
+            onClick={this.performSearch}
+            loader={this.state.loader}
+          />
+          <div className={styles.defaultDiv}>
+            <div className={styles.info}>
+              <span className={styles.emoticon}>☝️</span>
+              You can search tracks from search bar.
             </div>
-            <Lyrics
-              currentTrack={this.state.currentTrack}
-              currentLyrics={this.state.currentLyrics}
-              isLyricsOpen={this.state.isLyricsOpen}
-              closeLyrics={this.handleCloseLyrics}
-            />
           </div>
-        </div>
-        <ThemeSwitch />
-      </>
-    );
+          <ThemeSwitch />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Navigation
+            searchQuery={this.state.searchQuery}
+            updateSearchQuery={this.updateSearchQuery}
+            onClick={this.performSearch}
+            loader={this.state.loader}
+          />
+          <div className={`${styles.container} ${this.state.isLyricsOpen ? styles.lyricsOpen : ""}`}>
+            <div className={`${styles.resultsContainer} ${(this.state.searchSuggestions.length == 0) ? styles.hideResults : ""}`}>
+              <div className={styles.results}>
+                <div className={styles.resultsHeader}>
+                  Search Results
+                </div>
+                <div className={styles.resultsOverflow}>
+                  {this.state.searchSuggestions.map(suggestion => <SearchResult key={suggestion.id} data={suggestion} searchQuery={this.state.searchQuery} isSelected={this.state.selectedItem == suggestion.id} onClick={this.handleSearchResultClick} />)}
+                </div>
+                <div className={styles.pagination}>
+                  <button disabled={this.state.loader.isLoading} className={`${styles.previous} ${this.state.prevPage ? "" : styles.disable}`} onClick={this.fetchPreviousPage}>Previous</button>
+                  <button disabled={this.state.loader.isLoading} className={`${styles.next} ${this.state.nextPage ? "" : styles.disable}`} onClick={this.fetchNextPage}>Next</button>
+                </div>
+              </div>
+              <Lyrics
+                currentTrack={this.state.currentTrack}
+                currentLyrics={this.state.currentLyrics}
+                isLyricsOpen={this.state.isLyricsOpen}
+                closeLyrics={this.handleCloseLyrics}
+              />
+            </div>
+          </div>
+          <ThemeSwitch />
+        </>
+      );
+    }
   }
 }

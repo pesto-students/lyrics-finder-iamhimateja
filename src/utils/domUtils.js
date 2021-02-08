@@ -1,17 +1,18 @@
-const COLOR_SCHEMES = ["light-theme-dark-green", "light-theme-light-red", "light-theme-light-green", "light-theme-light-blue", "light-theme-light-green-2"];
-const $id = element_id => {
+export const COLOR_SCHEMES = ["light-theme-dark-green", "light-theme-light-red", "light-theme-light-green", "light-theme-light-blue", "light-theme-light-green-2"];
+
+export const $id = element_id => {
   return document.getElementById(element_id);
 };
 
-const $class = (selector, scope = document) => {
+export const $class = (selector, scope = document) => {
   return scope.querySelector(selector);
 };
 
-const $classes = (selector, scope = document) => {
+export const $classes = (selector, scope = document) => {
   return scope.querySelectorAll(selector);
 };
 
-const wordCount = (sentence) => {
+export const wordCount = (sentence) => {
   const sentenceAfterRemovingMultipleSpaces = sentence.replace(/\s\s+/g, ' ').split(' ');
   const validSentenceArray = sentenceAfterRemovingMultipleSpaces.filter(word => word.length >= 3);
   return validSentenceArray.length;
@@ -19,13 +20,13 @@ const wordCount = (sentence) => {
 
 // Detecting the mobile device
 // Reference: https://dev.to/timhuang/a-simple-way-to-detect-if-browser-is-on-a-mobile-device-with-javascript-44j3
-const isMobileDevice = () => {
+export const isMobileDevice = () => {
   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 };
 
-const randomItem = (array) => array[Math.floor(Math.random() * array.length)];
+export const randomItem = (array) => array[Math.floor(Math.random() * array.length)];
 
-const isValidWordKey = (keyCode) => {
+export const isValidWordKey = (keyCode) => {
   const modifierKeys = [8, 16, 17, 18, 20, 33, 34, 35, 36, 37, 38, 39, 40, 46, 91, 93];
   if (modifierKeys.includes(keyCode)) {
     return false;
@@ -33,7 +34,7 @@ const isValidWordKey = (keyCode) => {
   return true;
 };
 
-const debounce = function (fn, delay) {
+export const debounce = function (fn, delay) {
   let timer;
   return function () {
     let context = this, args = arguments;
@@ -44,7 +45,7 @@ const debounce = function (fn, delay) {
   };
 };
 
-const delay = async (seconds) => {
+export const delay = async (seconds) => {
   return new Promise(resolve =>
     setTimeout(() => {
       resolve();
@@ -52,7 +53,7 @@ const delay = async (seconds) => {
   );
 };
 
-function formatTrackDuration(duration) {
+export function formatTrackDuration(duration) {
   // ~~ => Shorthand for Math.floor
   // http://rocha.la/JavaScript-bitwise-operators-in-practice
   var hours = ~~(duration / 3600);
@@ -68,7 +69,7 @@ function formatTrackDuration(duration) {
   return formattedDuration;
 }
 
-function setInitialColorScheme() {
+export function setInitialColorScheme() {
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.body.classList.add('dark-theme');
   } else {
@@ -76,10 +77,10 @@ function setInitialColorScheme() {
   }
 }
 
-const getDescriptorData = (object, key) => Object.getOwnPropertyDescriptor(object, key);
-const isObject = input => (typeof input) === 'object';
+export const getDescriptorData = (object, key) => Object.getOwnPropertyDescriptor(object, key);
+export const isObject = input => (typeof input) === 'object';
 
-const deepClone = objToCopy => {
+export const deepClone = objToCopy => {
   if (typeof objToCopy === 'undefined') {
     throw new TypeError(`expected object, got ${typeof objToCopy}, For Example. {a: 1, b: 2}`);
   }
@@ -98,20 +99,8 @@ const deepClone = objToCopy => {
   }
 };
 
-export {
-  $id,
-  $class,
-  $classes,
-  COLOR_SCHEMES,
-  isMobileDevice,
-  randomItem,
-  wordCount,
-  debounce,
-  isValidWordKey,
-  delay,
-  formatTrackDuration,
-  setInitialColorScheme,
-  isObject,
-  getDescriptorData,
-  deepClone
+export const getRandomNumber = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { debounce, isValidWordKey, wordCount, delay } from "../../utils/domUtils";
+import { debounce, isValidWordKey, wordCount, delay, getRandomNumber } from "../../utils/domUtils";
 import LyricsApi from "../../utils/lyricsApi";
 import styles from "./style.module.scss";
 import SearchIcon from "../../icons/search-icon/searchIcon";
@@ -12,7 +12,11 @@ export default class MainSearch extends Component {
     searchSuggestions: [],
     openSuggestionsDropdown: false,
     searchQuery: "",
-    searchInputValue: ""
+    searchInputValue: "",
+    loader: {
+      isLoading: false,
+      percentage: 0
+    }
   };
 
   is_mounted = false;
@@ -21,6 +25,7 @@ export default class MainSearch extends Component {
     super(props);
     this.lyricsApi = new LyricsApi();
     this.defaultDebounceTimer = 500; // milliseconds
+    this.loaderInterval = undefined;
   }
 
   componentDidMount() {
@@ -29,6 +34,34 @@ export default class MainSearch extends Component {
 
   componentWillUnmount() {
     this.is_mounted = false;
+  }
+
+  showLoader = () => {
+    this.hideLoader();
+    let initialWidth = 0,
+      maxWidth = 10;
+    this.loaderInterval = setInterval(() => {
+      if ((initialWidth <= 90 && maxWidth <= 90)) {
+        initialWidth = getRandomNumber(initialWidth, maxWidth);
+        this.updateSingleStateProperty("loader", {
+          isLoading: true,
+          percentage: initialWidth
+        });
+        maxWidth = maxWidth + 10;
+      } else {
+        clearInterval(this.loaderInterval);
+      }
+    }, 100);
+  }
+
+  hideLoader = () => {
+    clearInterval(this.loaderInterval);
+    delay(250).then(() => {
+      this.updateSingleStateProperty("loader", {
+        isLoading: false,
+        percentage: 0
+      });
+    });
   }
 
   updateSingleStateProperty = (property, value) => {
@@ -41,6 +74,7 @@ export default class MainSearch extends Component {
 
   fetchTracksData = (searchQuery) => {
     if (wordCount(searchQuery) >= 1) {
+      this.showLoader();
       this.lyricsApi.searchTracks(searchQuery)
         .then(results => {
           const data = results.data;
@@ -49,9 +83,16 @@ export default class MainSearch extends Component {
               searchSuggestions: data,
               openSuggestionsDropdown: true,
               searchQuery: searchQuery,
-              searchInputValue: searchQuery
+              searchInputValue: searchQuery,
+              loader: {
+                isLoading: true,
+                percentage: 100
+              }
             });
           }
+        })
+        .then(() => {
+          this.hideLoader();
         })
         .catch((error) => {
           console.log(error);
@@ -92,6 +133,10 @@ export default class MainSearch extends Component {
   }
 
   render() {
+    const {
+      isLoading,
+      percentage
+    } = this.state.loader;
     return (
       <>
         <section className={styles.primarySearch}>
@@ -112,6 +157,9 @@ export default class MainSearch extends Component {
           >
             <SearchIcon container="homeSearchIcon" />
           </Link>
+          <div className={`${styles.loaderWrap} ${isLoading ? styles.show : ""}`}>
+            <div className={`${styles.loader} ${styles[`load-${percentage}-width`]}`}></div>
+          </div>
         </section>
         <Suggestions
           suggestions={this.state.searchSuggestions}

@@ -4,6 +4,7 @@ import { formatTrackDuration } from "../../utils/domUtils";
 import PlayIcon from '../../icons/play/component';
 import DownloadIcon from '../../icons/download/component';
 import CloseIcon from '../../icons/close/component';
+import NotFoundIcon from '../../icons/notFound/component';
 
 export default class Lyrics extends Component {
   constructor(props) {
@@ -58,6 +59,10 @@ export default class Lyrics extends Component {
           </div>
           <div className={styles.lyricsContainer}>
             <div className={styles.lyrics}>{this.props.currentLyrics}</div>
+            <div className={`${styles.notFound} ${(this.props.currentLyrics.length == "") ? styles.showNotFound : ""}`}>
+              <NotFoundIcon container="container" />
+              <span>Sorry, The lyrics you are looking for is not found.</span>
+            </div>
           </div>
           <div className={styles.playerContainer}>
             <div className={styles.player}>

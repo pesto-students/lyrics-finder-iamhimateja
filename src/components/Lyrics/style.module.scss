@@ -1,4 +1,5 @@
 /* stylelint-disable selector-pseudo-class-no-unknown */
+/* stylelint-disable no-descending-specificity */
 
 @import "../../styles/mixins";
 
@@ -16,9 +17,9 @@
     flex: 0;
 
     * {
-      opacity: 0;
-      visibility: hidden;
-      display: none;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      display: none !important;
     }
   }
 
@@ -84,12 +85,10 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: #969696;
       }
 
       .trackOwnerInfo {
         font-size: 1rem;
-        color: #a9a9a9;
         margin-top: 10px;
         max-width: 600px;
         line-height: 1.5;
@@ -98,7 +97,6 @@
       .trackDuration {
         margin-top: 10px;
         font-size: 0.9rem;
-        color: #6d6d6d;
       }
     }
 
@@ -160,7 +158,6 @@
     position: relative;
     padding: 10px;
     flex: 4;
-    background: #000;
     overflow-y: scroll;
 
     .lyrics {
@@ -170,6 +167,30 @@
       padding: 30px;
       padding-bottom: 50px;
       line-height: 2.5;
+    }
+
+    .notFound {
+      @include transform-center;
+
+      color: #737373;
+      text-align: center;
+      display: none;
+
+      .showNotFound {
+        display: block;
+      }
+
+      svg {
+        width: 20vw;
+        height: 20vw;
+        transform: translateX(20%);
+      }
+
+      span {
+        display: block;
+        margin-top: 10px;
+        opacity: 0.6;
+      }
     }
   }
 
@@ -224,15 +245,47 @@
   }
 }
 
-// :global([class*="light-theme-"]) {
-//   :local(.container) {
-//     background-color: #fff;
-//   }
-// }
+:global([class*="light-theme-"]) {
+  :local(.lyricsSection) {
+    .lyricsContainer {
+      background: #fff;
+      box-shadow: inset 1px 0 0 0 #eaeaea;
+    }
 
-// // stylelint-disable no-descending-specificity
-// :global(.dark-theme) {
-//   :local(.container) {
-//     background-color: #0f1223;
-//   }
-// }
+    .selectedTrackInfo {
+      background: #737373;
+
+      .trackDetails {
+        .trackTitle {
+          color: #dcdcdc;
+        }
+
+        .trackOwnerInfo,
+        .trackDuration {
+          color: #cecece;
+        }
+      }
+    }
+  }
+}
+
+:global(.dark-theme) {
+  :local(.lyricsSection) {
+    background: #000;
+  }
+
+  .selectedTrackInfo {
+    background: #0e0e0e;
+
+    .trackDetails {
+      .trackTitle {
+        color: #969696;
+      }
+
+      .trackOwnerInfo,
+      .trackDuration {
+        color: #a9a9a9;
+      }
+    }
+  }
+}

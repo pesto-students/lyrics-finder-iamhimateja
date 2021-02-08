@@ -27,6 +27,36 @@
     }
   }
 
+  .loaderWrap {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    left: 0;
+    bottom: 0;
+    transition: 200ms ease-in-out;
+
+    &.show {
+      height: 1px;
+      opacity: 1;
+    }
+
+    .loader {
+      position: absolute;
+      height: 1px;
+      left: 0;
+      bottom: 0;
+      background: #fff;
+      transition: 500ms ease-in-out;
+
+      @for $i from 1 through 100 {
+        &.load-#{$i}-width {
+          width: percentage($i / 100);
+        }
+      }
+    }
+  }
+
   @media only screen and (max-width: 600px) {
     width: calc(100% - 2vw);
   }

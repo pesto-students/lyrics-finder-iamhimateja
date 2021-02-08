@@ -18,9 +18,6 @@
   }
 
   &.isSelected {
-    background: rgba(95, 255, 0, 0.01) !important;
-    background: linear-gradient(to right, #000, #1d1d1d) !important;
-    box-shadow: inset 5px 0 0 0 #6d6d6d !important;
     padding-left: 15px;
   }
 
@@ -77,6 +74,12 @@
     background: #e4f1ff;
   }
 
+  &.isSelected {
+    background-color: #ffa500;
+    background-image: linear-gradient(0deg, #ffa500 0%, #ffc78d 100%);
+    box-shadow: inset 5px 0 0 0 #ce6666 !important;
+  }
+
   :local(.trackDetails) {
     :local(.trackTitle) {
       color: #000;
@@ -85,9 +88,16 @@
 }
 
 // stylelint-disable no-descending-specificity
+
 :global(.dark-theme) :local(.suggestion) {
   background: #212121;
   box-shadow: inset 0 -1px 0 0 #2d2d2d;
+
+  &.isSelected {
+    background: rgba(95, 255, 0, 0.01) !important;
+    background: linear-gradient(to right, #000, #1d1d1d) !important;
+    box-shadow: inset 5px 0 0 0 #6d6d6d !important;
+  }
 
   &:hover {
     background: #333;
