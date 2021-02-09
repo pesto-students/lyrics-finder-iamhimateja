@@ -14,13 +14,14 @@
     text-align: center;
     padding: 5vw;
     box-shadow: 0 0 0 1px #424242, inset 0 0 50px 10px rgba(53, 53, 53, 0.4);
-    border-radius: 50px;
+    border-radius: 10px;
 
     .emoticon {
       display: block;
       font-size: 10vw;
       margin-bottom: 2.5vh;
       filter: grayscale(1) contrast(2);
+      opacity: 0.5;
     }
   }
 }

@@ -30,6 +30,7 @@ export default class MainSearch extends Component {
 
   componentDidMount() {
     this.is_mounted = true;
+    document.body.classList.remove("search-results");
   }
 
   componentWillUnmount() {

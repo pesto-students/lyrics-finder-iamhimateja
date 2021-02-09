@@ -5,6 +5,7 @@ import PlayIcon from '../../icons/play/component';
 import DownloadIcon from '../../icons/download/component';
 import CloseIcon from '../../icons/close/component';
 import NotFoundIcon from '../../icons/notFound/component';
+import HyperLinkIcon from '../../icons/hyperlink/component';
 
 export default class Lyrics extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export default class Lyrics extends Component {
         preview: trackPreviewURL,
         artist,
         album,
+        link: deezerTrackPage,
         ...data
       } = this.props.currentTrack;
 
@@ -50,16 +52,20 @@ export default class Lyrics extends Component {
                   <PlayIcon container="container" />
                   <span className={styles.btnText}>Play preview</span>
                 </button>
-                <a href={lyricsDownloadURL} download={`${trackTitle} - ${artistName}.txt`} className={styles.downloadButton}>
+                <a href={lyricsDownloadURL} download={`${trackTitle} - ${artistName}.txt`} className={`${styles.downloadButton} ${(this.props.currentLyrics == "") ? styles.disabled : ""}`}>
                   <DownloadIcon container="container" />
                   <span className={styles.btnText}>Download Lyrics</span>
+                </a>
+                <a href={deezerTrackPage} className={styles.externalLink} target="_blank">
+                  <HyperLinkIcon container="container" />
+                  Play on Deezer
                 </a>
               </div>
             </div>
           </div>
           <div className={styles.lyricsContainer}>
-            <div className={styles.lyrics}>{this.props.currentLyrics}</div>
-            <div className={`${styles.notFound} ${(this.props.currentLyrics.length == "") ? styles.showNotFound : ""}`}>
+            <div className={`${styles.lyrics} ${(this.props.currentLyrics == "") ? styles.hideLyrics : ""}`}>{this.props.currentLyrics}</div>
+            <div className={`${styles.notFound} ${(this.props.currentLyrics == "") ? styles.showNotFound : ""}`}>
               <NotFoundIcon container="container" />
               <span>Sorry, The lyrics you are looking for is not found.</span>
             </div>
