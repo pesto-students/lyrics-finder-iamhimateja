@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { Suspense, lazy } from "react";
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
-import App from './components/App/App';
-import SearchResultsPage from "./components/SearchResultsPage/component";
 import { $id, setInitialColorScheme, randomItem, COLOR_SCHEMES } from "./utils/domUtils";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+document.body.classList.remove("search-results");
 window.lightThemeClass = randomItem(COLOR_SCHEMES);
 setInitialColorScheme();
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -20,14 +18,19 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
   }
 });
 
+const App = lazy(() => import('./components/App/App'));
+const SearchResultsPage = lazy(() => import('./components/SearchResultsPage/component'));
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <Switch>
-        <Route path="/" exact component={App}></Route>
-        <Route path="/search" exact component={SearchResultsPage}></Route>
-        <Route path="/lyrics" exact component={SearchResultsPage}></Route>
-      </Switch>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" exact component={App}></Route>
+          <Route path="/lyrics" exact component={SearchResultsPage}></Route>
+          <Route component={() => <h2>404: Page not Found</h2>}></Route>
+        </Switch>
+      </Suspense>
     </Router>
   </React.StrictMode>,
   $id('root')

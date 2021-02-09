@@ -1,12 +1,23 @@
 /* stylelint-disable selector-pseudo-class-no-unknown */
+/* stylelint-disable no-duplicate-selectors */
 
 .mainContainer {
   @media (prefers-color-scheme: dark) {
     fill: #fff;
   }
 
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: light) {
     fill: #797979;
+  }
+}
+
+.resultsContainer {
+  @media (prefers-color-scheme: dark) {
+    fill: #fff;
+  }
+
+  @media (prefers-color-scheme: light) {
+    fill: #e62684;
   }
 }
 
@@ -16,4 +27,12 @@
 
 :global([class*="light-theme-"]) :local(.mainContainer) {
   fill: #fff;
+}
+
+:global(.dark-theme) :local(.resultsContainer) {
+  fill: #fff;
+}
+
+:global([class*="light-theme-"]) :local(.resultsContainer) {
+  fill: #e62684;
 }

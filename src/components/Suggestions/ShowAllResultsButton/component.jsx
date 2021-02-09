@@ -12,8 +12,8 @@ export default class ShowAllResultsButton extends Component {
       <Link
         className={`${styles.showAllResultsButton} ${this.props.isOpen ? styles.show : ""}`}
         to={{
-          pathname: "/search",
-          search: `?q=${this.props.searchQuery}`
+          pathname: "/lyrics",
+          search: `?query=${this.props.searchQuery}`
         }}
       >
         Show all results

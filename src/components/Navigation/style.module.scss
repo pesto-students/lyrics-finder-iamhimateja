@@ -1,0 +1,136 @@
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+@import "../../styles/mixins";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  transition: 0.8s ease-in-out;
+  z-index: 10;
+
+  .loaderWrap {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    left: 0;
+    bottom: 0;
+    transition: 200ms ease-in-out;
+
+    &.show {
+      height: 1px;
+      opacity: 1;
+    }
+
+    .loader {
+      position: absolute;
+      height: 1px;
+      left: 0;
+      bottom: 0;
+      background: #fff;
+      transition: 500ms ease-in-out;
+
+      @for $i from 1 through 100 {
+        &.load-#{$i}-width {
+          width: percentage($i / 100);
+        }
+      }
+    }
+  }
+
+  .logo {
+    display: inline-flex;
+    height: 100%;
+
+    svg {
+      width: 35px;
+      margin: 0 15px;
+    }
+  }
+
+  .searchWrap {
+    @include transform-center;
+
+    width: 500px;
+    border-radius: 50px;
+
+    .searchInput {
+      display: block;
+      width: 100%;
+      height: 40px;
+      border: 0;
+      border-radius: 50px;
+      padding: 5px 20px;
+      font-size: 15px;
+      outline: none;
+      letter-spacing: 1px;
+      text-align: center;
+      transition: 0.3s ease-in-out;
+
+      &:focus {
+        text-align: left;
+      }
+    }
+
+    .searchButton {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 0;
+      right: 5px;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+
+      svg {
+        @include transform-center;
+
+        width: 20px;
+      }
+    }
+  }
+}
+
+:global([class*="light-theme-"]) {
+  :local(.header) {
+    background: #fff;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+
+    .searchWrap {
+      .searchInput {
+        background: #fff;
+        color: #404040;
+        box-shadow: 0 0 0 1px #d6d6d6;
+
+        &:focus {
+          box-shadow: 0 0 0 2px #7d7d7d;
+        }
+      }
+    }
+  }
+}
+
+// stylelint-disable no-descending-specificity
+:global(.dark-theme) {
+  :local(.header) {
+    background: #141414;
+
+    .searchWrap {
+      box-shadow: 0 0 0 1px #101324;
+
+      .searchInput {
+        background: #151515;
+        color: #9a9a9a;
+        box-shadow: 0 0 0 1px #2f2f2f;
+
+        &:focus {
+          box-shadow: 0 0 0 2px #7d7d7d;
+        }
+      }
+    }
+  }
+}

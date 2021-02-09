@@ -1,25 +1,15 @@
 /* stylelint-disable selector-pseudo-class-no-unknown */
 
-.searchIcon {
+.homeSearchIcon,
+.resultsSearchIcon {
   position: absolute;
   width: 25px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
-  .searchCircle,
-  .searchStrokePath {
-    @media (prefers-color-scheme: light) {
-      stroke: #200e32;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      stroke: #fff;
-    }
-  }
 }
 
-:global(.dark-theme) :local(.searchIcon) {
+:global(.dark-theme) :local(.homeSearchIcon) {
   :local(.searchCircle),
   :local(.searchStrokePath) {
     stroke: #fff;
@@ -27,7 +17,7 @@
 }
 
 // stylelint-disable no-descending-specificity
-:global([class*="light-theme-"]) :local(.searchIcon) {
+:global([class*="light-theme-"]) :local(.homeSearchIcon) {
   :local(.searchCircle),
   :local(.searchStrokePath) {
     stroke: #200e32;
