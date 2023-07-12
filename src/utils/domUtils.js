@@ -86,7 +86,7 @@ export const deepClone = objToCopy => {
   }
   if (isObject(objToCopy) && (objToCopy !== null)) {
     const deepCopiedObject = {};
-    for (const [key, value] of Object.entries(objToCopy)) {
+    for (const [key] of Object.entries(objToCopy)) {
       if (isObject(objToCopy[key])) {
         deepCopiedObject[key] = deepClone(objToCopy[key]);
       } else {

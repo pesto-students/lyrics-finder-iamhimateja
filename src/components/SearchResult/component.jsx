@@ -12,15 +12,11 @@ export default class SearchResult extends PureComponent {
       id: identifier,
       title: trackTitle,
       duration,
-      explicit_lyrics: explicitLyrics,
-      preview: trackPreviewURL,
       artist,
       album,
-      ...data
     } = this.props.data;
 
     const artistName = artist.name;
-    const artistAvatarSmall = artist.picture_small;
     const albumName = album.title;
     const albumCoverSmall = album.cover_small;
 

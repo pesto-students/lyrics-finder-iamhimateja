@@ -3,7 +3,7 @@ import SunIcon from "../../icons/sun";
 import styles from "./style.module.scss";
 
 export default function ThemeSwitch() {
-  function toggleTheme(event) {
+  function toggleTheme() {
     if (document.body.classList.contains("dark-theme")) {
       document.body.classList.remove("dark-theme");
       document.body.classList.add(window.lightThemeClass);
