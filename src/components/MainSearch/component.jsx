@@ -5,7 +5,7 @@ import styles from "./style.module.scss";
 import SearchIcon from "../../icons/search-icon/searchIcon";
 import Suggestions from "../Suggestions/component";
 import SearchInput from '../SearchInput/component';
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default class MainSearch extends Component {
   state = {
@@ -53,7 +53,7 @@ export default class MainSearch extends Component {
         clearInterval(this.loaderInterval);
       }
     }, 100);
-  }
+  };
 
   hideLoader = () => {
     clearInterval(this.loaderInterval);
@@ -63,7 +63,7 @@ export default class MainSearch extends Component {
         percentage: 0
       });
     });
-  }
+  };
 
   updateSingleStateProperty = (property, value) => {
     if (this.is_mounted) {
@@ -71,7 +71,7 @@ export default class MainSearch extends Component {
       stateCopy[property] = value;
       this.setState(stateCopy);
     }
-  }
+  };
 
   fetchTracksData = (searchQuery) => {
     if (wordCount(searchQuery) >= 1) {
@@ -99,22 +99,22 @@ export default class MainSearch extends Component {
           console.log(error);
         });
     }
-  }
+  };
 
   suggestionsFunction = (event) => {
     this.updateSingleStateProperty("searchInputValue", event.target.value);
     if (isValidWordKey(event.keyCode)) {
       this.fetchTracksData(event.target.value);
     }
-  }
+  };
 
-  showSuggestionsDropdown = (event) => {
+  showSuggestionsDropdown = () => {
     if (this.state.searchSuggestions.length > 0 && this.is_mounted) {
       this.updateSingleStateProperty("openSuggestionsDropdown", true);
     }
-  }
+  };
 
-  hideSuggestionsDropdown = (event) => {
+  hideSuggestionsDropdown = () => {
     if (this.is_mounted) {
       let stateCopy = Object.assign({}, this.state);
       stateCopy.openSuggestionsDropdown = false;
@@ -131,7 +131,7 @@ export default class MainSearch extends Component {
         }
       });
     }
-  }
+  };
 
   render() {
     const {

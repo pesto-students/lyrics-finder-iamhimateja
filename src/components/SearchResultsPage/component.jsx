@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styles from "./style.module.scss";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { wordCount, getRandomNumber } from '../../utils/domUtils';
 import Navigation from '../Navigation/component';
 import ThemeSwitch from "../ThemeSwitch/component";
@@ -95,7 +94,7 @@ export default class SearchResultsPage extends Component {
         clearInterval(this.loaderInterval);
       }
     }, 100);
-  }
+  };
 
   hideLoader = () => {
     clearInterval(this.loaderInterval);
@@ -103,7 +102,7 @@ export default class SearchResultsPage extends Component {
       isLoading: false,
       percentage: 0
     });
-  }
+  };
 
   updateSingleStateProperty = (property, value) => {
     if (this.is_mounted) {
@@ -111,7 +110,7 @@ export default class SearchResultsPage extends Component {
       stateCopy[property] = value;
       this.setState(stateCopy);
     }
-  }
+  };
 
   updateMultipleStateProperties = (propertyList) => {
     if (this.is_mounted) {
@@ -121,13 +120,13 @@ export default class SearchResultsPage extends Component {
       }
       this.setState(stateCopy);
     }
-  }
+  };
 
   updateHistoryState = () => {
     this.props.history.push({
       search: "?" + new URLSearchParams({ query: this.state.searchQuery, "selected-item": this.state.selectedItem }).toString()
     });
-  }
+  };
 
   removeParamFromSearchHistory = (param) => {
     let historyParams = new URLSearchParams(this.props.location.search);
@@ -135,24 +134,24 @@ export default class SearchResultsPage extends Component {
     this.props.history.push({
       search: "?" + historyParams.toString()
     });
-  }
+  };
 
   getTrackDetails = id => {
     const results = this.state.searchSuggestions.filter(result => result.id == id);
     return (results.length == 1) ? results[0] : false;
-  }
+  };
 
   updateSearchQuery = event => {
     this.updateSingleStateProperty("searchInputValue", event.currentTarget.value);
     if (event.key == "Enter") {
       this.performSearch();
     }
-  }
+  };
 
   updateSelectedTrack = (trackIdentifier) => {
     this.updateSingleStateProperty("selectedItem", trackIdentifier);
     this.updateHistoryState();
-  }
+  };
 
   performSearch = () => {
     if (wordCount(this.state.searchInputValue) >= 1) {
@@ -184,7 +183,7 @@ export default class SearchResultsPage extends Component {
           console.log(error);
         });
     }
-  }
+  };
 
   fetchLyrics = (id) => {
     const currentTrack = this.getTrackDetails(id);
@@ -193,7 +192,6 @@ export default class SearchResultsPage extends Component {
         id: identifier,
         title: trackTitle,
         artist,
-        ...data
       } = currentTrack;
 
       const artistName = artist.name;
@@ -214,12 +212,12 @@ export default class SearchResultsPage extends Component {
           console.log(error);
         });
     }
-  }
+  };
 
   handleSearchResultClick = event => {
     const identifier = event.currentTarget.id;
     this.fetchLyrics(identifier);
-  }
+  };
 
   handleCloseLyrics = () => {
     this.updateMultipleStateProperties({
@@ -228,15 +226,15 @@ export default class SearchResultsPage extends Component {
       selectedItem: ""
     });
     this.removeParamFromSearchHistory("selected-item");
-  }
+  };
 
-  fetchPreviousPage = (event) => {
+  fetchPreviousPage = () => {
     this.paginateSearchResults(this.state.prevPage);
-  }
+  };
 
-  fetchNextPage = (event) => {
+  fetchNextPage = () => {
     this.paginateSearchResults(this.state.nextPage);
-  }
+  };
 
   paginateSearchResults = async (pageURL) => {
     this.showLoader();
@@ -269,7 +267,7 @@ export default class SearchResultsPage extends Component {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   render() {
     if (this.state.searchSuggestions.length == 0) {

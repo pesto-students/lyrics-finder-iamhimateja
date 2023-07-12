@@ -15,15 +15,11 @@ export default class Lyrics extends Component {
   render() {
     if (Object.keys(this.props.currentTrack || {}).length > 0) {
       const {
-        id: identifier,
         title: trackTitle,
         duration,
-        explicit_lyrics: explicitLyrics,
-        preview: trackPreviewURL,
         artist,
         album,
-        link: deezerTrackPage,
-        ...data
+        link: deezerTrackPage
       } = this.props.currentTrack;
 
       const artistName = artist.name;
